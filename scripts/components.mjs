@@ -99,8 +99,12 @@ export const category = (s) =>
         : /design-with|homage-|air-jordan|shoe-design|endless-garden/.test(s)
           ? "design"
           : "engineering";
+// The header RESUME link opens the current resume in a new tab. The original
+// Wix-era address stays on disk (unlinked) so outside links to it keep working.
+export const RESUME_ORIGINAL = "/_files/ugd/55147f_6ee3d566cf67449d8fc84a0aa4309a5c.pdf";
+export const RESUME_HREF = "/_files/ugd/Charlene_Lam_Resume.pdf";
 const contact =
-  '<a href="/_files/ugd/55147f_6ee3d566cf67449d8fc84a0aa4309a5c.pdf">RESUME</a><a href="https://www.linkedin.com/in/charlene-lam/">LINKEDIN</a><a href="mailto:charlenelam138@gmail.com">EMAIL</a>';
+  `<a href="${RESUME_HREF}" target="_blank" rel="noopener noreferrer">RESUME</a><a href="https://www.linkedin.com/in/charlene-lam/">LINKEDIN</a><a href="mailto:charlenelam138@gmail.com">EMAIL</a>`;
 export function SiteHeader(p) {
   return `<div class="masthead"><a class="skip-link" href="#main">Skip to Main Content</a><header class="site-header" id="top"><a class="wordmark" href="/">CHARLENE</a><a class="identity-description" href="/">designer | mechanical engineer | creative</a><button class="menu-toggle" type="button" aria-label="Toggle navigation" aria-expanded="false" aria-controls="primary-navigation"><span></span><span></span></button><nav id="primary-navigation" aria-label="Main navigation">${["engineering", "design", "art", "photography", "about"].map((c) => `<a href="/${c}" ${category(p.slug) === c ? 'aria-current="' + (p.slug === c ? "page" : "true") + '"' : ""}>${c.toUpperCase()}</a>`).join("")}<div class="mobile-contact">${contact}</div></nav><nav class="contact-links" aria-label="Contact and resume">${contact}</nav></header></div>`;
 }

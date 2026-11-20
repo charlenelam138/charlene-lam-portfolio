@@ -5,6 +5,8 @@ import {
   omittedImageIds,
   cardsFor,
   hiddenCardHrefs,
+  RESUME_ORIGINAL,
+  RESUME_HREF,
 } from "./components.mjs";
 const pages = JSON.parse(fs.readFileSync("src/content.json", "utf8"));
 const assets = JSON.parse(fs.readFileSync("audit/assets.json", "utf8"));
@@ -128,8 +130,15 @@ for (const p of pages) {
     (x) => p.slug !== "fullscreen-page" && x.href.includes(".pdf"),
   )) {
     const href = link.href.replace("https://www.charlene-lam.com", "");
-    if (!html.includes(href))
+    // The header RESUME link intentionally points to the renamed resume file.
+    if (!html.includes(href === RESUME_ORIGINAL ? RESUME_HREF : href))
       errors.push(`${p.path}: missing original PDF ${href}`);
+  }
+  if (p.slug !== "fullscreen-page") {
+    if (!html.includes(`href="${RESUME_HREF}" target="_blank" rel="noopener noreferrer">RESUME</a>`))
+      errors.push(`${p.path}: RESUME link must open ${RESUME_HREF} in a new tab`);
+    if (html.includes(RESUME_ORIGINAL))
+      errors.push(`${p.path}: still links to the old resume address`);
   }
   // Original section links were captured as page URLs without their Wix targets.
   // Their recovered targets are checked above; all other destinations must remain.
@@ -139,7 +148,7 @@ for (const p of pages) {
     if (href === p.path && p.nav.some((item) => item.text === link.text))
       continue;
     if (hiddenCardHrefs(p.slug).includes(href)) continue; // card hidden on purpose
-    if (!html.includes(href))
+    if (!html.includes(href === RESUME_ORIGINAL ? RESUME_HREF : href))
       errors.push(`${p.path}: missing original link ${href}`);
   }
   if (
