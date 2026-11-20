@@ -2756,5 +2756,13 @@
       }
     ],
     "local": "/assets/55147f_7a207269769c4fd68229b72a3164c907f000.jpg"
+  },
+  {
+    "url": "/assets/macbook-neo-cover.jpg",
+    "path": "portfolio-uploading-assets/MacBook_Neo_Cover.jpg",
+    "bytes": 340165,
+    "sha256": "a4f9ecaf4d692f482a0533a8321ae505dde5ba0996d0bb62eb3aab1b8d3c6c77",
+    "references": [],
+    "local": "/assets/macbook-neo-cover.jpg"
   }
 ]

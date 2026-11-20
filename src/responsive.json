@@ -2624,5 +2624,24 @@
         "width": 854
       }
     ]
+  },
+  "/assets/macbook-neo-cover.jpg": {
+    "width": 1417,
+    "height": 752,
+    "default": "/assets/macbook-neo-cover-960.jpg",
+    "sources": [
+      {
+        "src": "/assets/macbook-neo-cover-480.jpg",
+        "width": 480
+      },
+      {
+        "src": "/assets/macbook-neo-cover-960.jpg",
+        "width": 960
+      },
+      {
+        "src": "/assets/macbook-neo-cover.jpg",
+        "width": 1417
+      }
+    ]
   }
 }

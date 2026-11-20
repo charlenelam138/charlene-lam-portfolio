@@ -687,11 +687,11 @@
             "type": "card",
             "image": {
               "type": "image",
-              "src": "/assets/55147f_5420dde9a0ff451189bd66ce252d93b1~mv2.png",
-              "alt": "Asset 16.png",
+              "src": "/assets/macbook-neo-cover.jpg",
+              "alt": "MacBook Neo",
               "id": "img_comp-m3wzzlw1",
-              "width": 657,
-              "height": 365
+              "width": 1417,
+              "height": 752
             },
             "caption": {
               "type": "text",
@@ -2708,11 +2708,11 @@
             "type": "card",
             "image": {
               "type": "image",
-              "src": "/assets/55147f_5420dde9a0ff451189bd66ce252d93b1~mv2.png",
-              "alt": "Asset 16.png",
+              "src": "/assets/macbook-neo-cover.jpg",
+              "alt": "MacBook Neo",
               "id": "img_comp-mlihtv48",
-              "width": 657,
-              "height": 365
+              "width": 1417,
+              "height": 752
             },
             "caption": {
               "type": "text",
