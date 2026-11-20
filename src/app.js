@@ -19,3 +19,8 @@ document.addEventListener("keydown", (e) => {
   }
 });
 matchMedia("(max-width:1100px)").addEventListener("change", closeMenu);
+// Videos are non-interactive: no right-click menu over them (pointer-events:none
+// sends the click to the figure, so suppress it there too).
+document.addEventListener("contextmenu", (e) => {
+  if (e.target.closest?.(".video-media")) e.preventDefault();
+});

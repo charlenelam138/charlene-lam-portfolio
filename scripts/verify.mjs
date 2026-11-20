@@ -1,5 +1,6 @@
 import fs from "node:fs";
 import crypto from "node:crypto";
+import { omittedVideoIds, omittedImageIds } from "./components.mjs";
 const pages = JSON.parse(fs.readFileSync("src/content.json", "utf8"));
 const assets = JSON.parse(fs.readFileSync("audit/assets.json", "utf8"));
 const originals = JSON.parse(
@@ -87,11 +88,11 @@ for (const p of pages) {
   const rendered = [...html.matchAll(/data-original="([^"]+)"/g)].map(
     (m) => m[1],
   );
-  if (JSON.stringify(rendered) !== JSON.stringify(images(p.nodes)))
+  if (JSON.stringify(rendered) !== JSON.stringify(images(p.nodes.filter(n => !omittedImageIds.has(n.id)))))
     errors.push(`${p.path}: original image sequence changed`);
   imageCount += rendered.length;
   const videos = [...html.matchAll(/<video[^>]*\ssrc="([^"]+)"/g)].map(m => m[1]);
-  if (JSON.stringify(videos) !== JSON.stringify(p.nodes.filter(n => n.type === "video").map(n => n.src)))
+  if (JSON.stringify(videos) !== JSON.stringify(p.nodes.filter(n => n.type === "video" && !omittedVideoIds.has(n.id)).map(n => n.src)))
     errors.push(`${p.path}: original video sequence changed`);
   if (/<dialog[\s>]|\bdata-image=|class="[^"]*(?:expand-icon|photo-expand|expand-image)/.test(html))
     errors.push(`${p.path}: image enlargement controls must stay removed`);

@@ -318,7 +318,7 @@ main  {
   font-size: 20px;
   letter-spacing: 0;
 }
-.index-content:has(> .video-media), .page-art .index-content  {
+.index-content:has(> .video-media), .page-art .index-content:has(> .media)  {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   align-items: center;
@@ -432,6 +432,8 @@ main  {
   max-height: 650px;
   object-fit: contain;
   background: var(--paper);
+  /* Decorative loop: no controls and no interaction of any kind. */
+  pointer-events: none;
 }
 .media-group {
   display: grid;
@@ -845,7 +847,7 @@ figcaption .rich {
   .project h2  {
     font-size: 18px;
   }
-  .index-content:has(> .video-media), .page-art .index-content  {
+  .index-content:has(> .video-media), .page-art .index-content:has(> .media)  {
     grid-template-columns: 1fr;
     gap: var(--s6);
   }

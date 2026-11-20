@@ -29,6 +29,11 @@ export const plain = (s) =>
     .replace(/\s+/g, " ")
     .trim();
 export const indexes = new Set(["home", "engineering", "design", "art"]);
+// Top-of-page hero videos on the Engineering and Design index pages are not
+// rendered. They stay in src/content.json and the video files stay in public/.
+export const omittedVideoIds = new Set(["comp-lkobaciy", "comp-l96h57jb"]);
+// Same for the animated GIF at the top of the Art page.
+export const omittedImageIds = new Set(["img_comp-m3x42dxq"]);
 export const panels = new Set([
   "sageware",
   "copy-of-sageware",
@@ -174,7 +179,7 @@ export function renderPage(
         '<span class="project-year">$1</span>');
     return html;
   };
-  const video = (n, caption) => `<figure class="media video-media"><video id="${esc(n.id)}" src="${esc(n.src)}" ${n.poster ? `poster="${esc(n.poster)}"` : ""} controls playsinline preload="metadata" ${n.loop ? "loop" : ""} ${n.muted ? "muted" : ""} aria-label="${esc(label)} video"></video>${caption ? `<figcaption>${text(caption)}</figcaption>` : ''}</figure>`;
+  const video = (n, caption) => `<figure class="media video-media"><video id="${esc(n.id)}" src="${esc(n.src)}" ${n.poster ? `poster="${esc(n.poster)}"` : ""} autoplay muted loop playsinline disablepictureinpicture disableremoteplayback controlslist="nodownload nofullscreen noremoteplayback" preload="metadata" aria-label="${esc(label)} video"></video>${caption ? `<figcaption>${text(caption)}</figcaption>` : ''}</figure>`;
   if (engineeringLayout)
     return renderEngineeringLayout(p, engineeringLayout, { esc, figure, video });
   const captionIds = new Set(['comp-ll3d20dn', 'comp-ll3d4zs8', 'comp-lkzur2ah', 'comp-lkzus9qv', 'comp-lkzx2rdh']);
@@ -210,6 +215,7 @@ export function renderPage(
       body += html;
       continue;
     }
+    if (n.type === "image" && omittedImageIds.has(n.id)) continue;
     if (n.type === "cards") {
       body += `<div class="project-grid">${n.items.map((c) => `<a class="project" href="${esc(c.href)}" aria-labelledby="${esc(c.caption.id)}"><div class="project-image"${focalPoints[c.href] ? ` style="--focal-point:${focalPoints[c.href]}"` : ""}>${image(c.image, true, "")}</div>${Rich(c.caption)}</a>`).join("")}</div>`;
       continue;
@@ -309,6 +315,7 @@ export function renderPage(
       continue;
     }
     if (n.type === "video") {
+      if (omittedVideoIds.has(n.id)) continue;
       const caption = captionIds.has(nodes[i+1]?.id) ? nodes[++i] : null;
       body += video(n, caption);
       continue;
