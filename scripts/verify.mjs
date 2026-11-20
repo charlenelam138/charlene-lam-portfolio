@@ -13,6 +13,7 @@ const assets = JSON.parse(fs.readFileSync("audit/assets.json", "utf8"));
 const originals = JSON.parse(
   fs.readFileSync("audit/original-pages.json", "utf8"),
 );
+const textRenames = JSON.parse(fs.readFileSync("src/text-renames.json", "utf8"));
 const errors = [];
 let references = 0,
   textBlocks = 0,
@@ -88,7 +89,11 @@ for (const p of pages) {
     "EMAIL",
   ]);
   for (const rich of original.richtext) {
-    const value = plain(rich);
+    // Intentional text changes (src/text-renames.json) are mapped from the
+    // original audit text to the new wording before comparing.
+    let value = plain(rich);
+    for (const [from, to] of textRenames)
+      value = value.replaceAll(plain(from), plain(to));
     if (
       !chrome.has(value) &&
       !sourceBlocks.some((n) => plain(n.html) === value)
