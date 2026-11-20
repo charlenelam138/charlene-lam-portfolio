@@ -10,7 +10,7 @@ Edit shared tokens in `src/styles.css`, components in `scripts/components.mjs`, 
 | Section/subsection | Fluid 26–32px / 21–24px | Shared h2/h3 hierarchy |
 | Body/secondary | 18px desktop; 17px tablet; 16px phone / 15px; engineering uses main’s 16px body | Prose / metadata, captions and legends |
 | Leading | Body 1.65; headings 1.15 | Shared typography |
-| Colors | White #fff; ink #242323; muted #616166; surface #f2f3f8; line #dedee4; action #6661a2 | Shared canvas, text and controls |
+| Colors | White #fff; ink #242323; muted #616166; tagline #b8b8b8; surface #f2f3f8; line #dedee4; action #6661a2 | Shared canvas, text and controls; tagline is the masthead line under CHARLENE, text and `|` separators alike |
 | Disciplines | Engineering #40678f; Design #c82f25; Art #6661a2; Photography #596b26 | Category headings and active navigation |
 | Containers | Wide 1328px; project 1040px; reading 720px; artwork 760px | Centered containers with left-aligned contents |
 | Gutters | 56px desktop; 32px tablet; 20px phone | Shared outer guides |
