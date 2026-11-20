@@ -135,7 +135,7 @@ export function renderPage(
     const picture = image(n, false, alt);
     const visual = `<div class="figure-visual">${picture}</div>`;
     const ratio = imageRatio(n, responsive);
-    return `<figure class="media ${n.width <= 100 && n.height <= 100 ? "small-figure" : ""} ${n.src.endsWith('.png') ? 'media--diagram' : ''}" style="--ratio:${ratio};--media-width:${Math.min(1040,ratio*760)}px" id="${esc(n.id)}-figure">${n.href ? `<a href="${esc(n.href)}">${picture}</a>` : visual}${caption ? `<figcaption>${text(caption)}</figcaption>` : ''}${transcripts[n.src] ? `<details class="panel-transcript"><summary>Read panel text</summary><div class="transcript-content">${transcripts[n.src].map((t) => `<p>${esc(t)}</p>`).join("")}</div></details>` : ""}</figure>`;
+    return `<figure class="media ${n.width <= 100 && n.height <= 100 ? "small-figure" : ""} ${n.src.endsWith('.png') ? 'media--diagram' : ''}" style="--ratio:${ratio};--media-width:${Math.min(1040,ratio*760)}px" id="${esc(n.id)}-figure">${n.href ? `<a href="${esc(n.href)}">${picture}</a>` : visual}${caption ? `<figcaption>${text(caption)}</figcaption>` : ''}${transcripts[n.src] ? `<div class="panel-text sr-only">${transcripts[n.src].map((t) => `<p>${esc(t)}</p>`).join("")}</div>` : ""}</figure>`;
   };
   const download = (n, html) =>
     `<a class="download" href="${esc(n.href)}">${html || esc(n.text || (p.slug === "endless-garden" ? "Download Report" : "Open linked document"))}<span aria-hidden="true">↗</span></a>`;

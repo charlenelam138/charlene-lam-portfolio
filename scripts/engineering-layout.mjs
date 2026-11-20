@@ -18,7 +18,6 @@ export function renderEngineeringLayout(p, tree, { esc, figure, video }) {
   const sourceKey = n => n.id || "link:" + n.href;
   const sources = new Map(p.nodes.map(n => [sourceKey(n), n]));
   const titleId = p.nodes.find(n => n.type === "text" && /<h[123]/.test(n.html))?.id;
-  const panelText = [];
   const captions = new Map();
   const captionIds = new Set(["comp-ll3d20dn", "comp-ll3d4zs8", "comp-lkzur2ah", "comp-lkzus9qv", "comp-lkzx2rdh"]);
   p.nodes.forEach((n, i) => {
@@ -79,11 +78,7 @@ export function renderEngineeringLayout(p, tree, { esc, figure, video }) {
         id = null; // The shared rich-text block owns its original ID.
         content = rich(source, node.textStyles);
       } else if (source.type === "image") {
-        content = figure(source).replace(/<details class="panel-transcript">[\s\S]*?<\/details>/g, disclosure => {
-          const number = panelText.length + 1;
-          panelText.push(disclosure.replace("<summary>", `<summary aria-label="Read panel ${number} text">`));
-          return "";
-        });
+        content = figure(source);
         if (captions.has(source.id))
           content = content.replace("<figure ", `<figure aria-describedby="${esc(captions.get(source.id))}" `);
       }
@@ -115,5 +110,5 @@ export function renderEngineeringLayout(p, tree, { esc, figure, video }) {
   const anchors = p.nodes.filter(n => n.type === "anchor" && !ids.has(n.id))
     .map(n => `<span class="anchor" id="${esc(n.id)}"></span>`).join("");
   const label = esc(p.title.split(" | ")[0]);
-  return `<main class="engineering-original" id="main" tabindex="-1" aria-label="${label}">${titleSeen ? "" : `<h1 class="sr-only">${label}</h1>`}${anchors}${body}${panelText.length ? `<div class="engineering-panel-text">${panelText.join("")}</div>` : ""}</main>`;
+  return `<main class="engineering-original" id="main" tabindex="-1" aria-label="${label}">${titleSeen ? "" : `<h1 class="sr-only">${label}</h1>`}${anchors}${body}</main>`;
 }

@@ -568,7 +568,7 @@ figcaption .rich {
 .download strong  {
   font-weight: 400;
 }
-.panel-transcript summary, .code-details summary {
+.code-details summary {
   cursor: pointer;
   min-height: 48px;
   padding: 10px 0;
@@ -577,18 +577,6 @@ figcaption .rich {
 .panels .figure-visual > img  {
   width: 100%;
   max-height: none;
-}
-.panel-transcript  {
-  max-width: var(--reading);
-  margin: 8px 0 32px;
-  font-size: 16px;
-}
-.transcript-content  {
-  padding: 16px 20px;
-  border-left: 2px solid var(--line);
-}
-.transcript-content p  {
-  margin-bottom: var(--s3);
 }
 /* Photography preserves the original mixed proportions, grouped in rows. */
 .page-photography main  {
@@ -950,7 +938,6 @@ figcaption .rich {
   margin: 0;
   font-size: 28px;
 }
-.engineering-panel-text { max-width: 980px; margin: 32px auto; padding: 0 var(--gutter); }
 @media (min-width: 1280px) {
   .engineering-layout-page .masthead { min-height: calc(161.1015625 * var(--engineering-unit)); }
   .engineering-original .engineering-grid { gap: 0; }
