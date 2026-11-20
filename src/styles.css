@@ -661,12 +661,6 @@ figcaption .rich {
   a:hover  {
     color: var(--category);
   }
-  .project:hover  {
-    color: var(--accent);
-  }
-  .project:hover .project-image  {
-    opacity: .94;
-  }
   .download:hover  {
     background: #efecf8;
   }
@@ -971,4 +965,63 @@ figcaption .rich {
   .engineering-original .engineering-intro-grid > .engineering-title { order: 0; }
   .engineering-original .engineering-intro-grid > .engineering-date { order: 1; }
   .engineering-original .engineering-intro-grid > :is(.engineering-image, .engineering-video) { order: 3; }
+}
+/* Project cards on hover-capable devices: the label leaves its place beneath the
+   image and appears centered over a dark overlay on hover or keyboard focus,
+   fading out again afterwards. Touch devices match none of this and keep the
+   label underneath. The label stays in the DOM (opacity only) so screen readers
+   and the link's aria-labelledby still read it. */
+@media (hover: hover)  {
+  .project-grid  {
+    row-gap: var(--s6);
+  }
+  .project  {
+    position: relative;
+    border-radius: 24px;
+  }
+  .project-image  {
+    position: relative;
+  }
+  .project-image::after  {
+    content: "";
+    position: absolute;
+    inset: 0;
+    /* Dark enough for white text on very light images (about 6:1 over pure white). */
+    background: rgba(0, 0, 0, .62);
+    opacity: 0;
+    transition: opacity 240ms ease;
+  }
+  .project .rich  {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    aspect-ratio: 658/366;
+    margin: 0;
+    padding: var(--s6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: #fff;
+    opacity: 0;
+    transition: opacity 240ms ease;
+    pointer-events: none;
+  }
+  .project .rich h2  {
+    color: #fff;
+    text-wrap: balance;
+  }
+  .project:is(:hover, :focus-visible) .project-image  {
+    opacity: 1;
+  }
+  .project:is(:hover, :focus-visible) .project-image::after,
+  .project:is(:hover, :focus-visible) .rich  {
+    opacity: 1;
+  }
+}
+@media (hover: hover) and (max-width: 640px)  {
+  .project  {
+    border-radius: 20px;
+  }
 }

@@ -15,7 +15,7 @@ Edit shared tokens in `src/styles.css`, components in `scripts/components.mjs`, 
 | Containers | Wide 1328px; project 1040px; reading 720px; artwork 760px | Centered containers with left-aligned contents |
 | Gutters | 56px desktop; 32px tablet; 20px phone | Shared outer guides |
 | Spacing | 4, 8, 12, 16, 24, 32, 48, 64, 96px | Text, media, sections and page endings |
-| Project links | Original 658:366 frame; radius 24px/20px; persistent caption; image cropped to fill the frame (`object-fit: cover`), centered unless `src/card-focal-points.json` sets a per-card focal point, no visible bars | Home and discipline indexes |
+| Project links | Original 658:366 frame; radius 24px/20px; image cropped to fill the frame (`object-fit: cover`), centered unless `src/card-focal-points.json` sets a per-card focal point, no visible bars. Touch devices: persistent caption beneath the image. Hover-capable devices (`@media (hover: hover)`): no caption beneath; on hover or keyboard focus a `rgba(0,0,0,.62)` overlay (about 6:1 contrast for white text over pure white) and the label fade in over the image in 240ms, centered, white, project name bold and the rest regular; the label stays in the DOM for screen readers | Home, Engineering, Design and Art indexes (Photography has no cards) |
 | Media | Natural proportions, no crops, no decorative frames | Diagrams, artwork, videos and panels |
 | Controls | 44–48px standalone targets; 3px visible focus; 160ms color/opacity feedback | Navigation, downloads and disclosures |
 
