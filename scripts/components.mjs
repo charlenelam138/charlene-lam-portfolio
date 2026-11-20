@@ -1,5 +1,20 @@
+import fs from "node:fs";
 import { imageRatio, renderMediaGroup } from "./media-layout.mjs";
 import { renderEngineeringLayout } from "./engineering-layout.mjs";
+
+// Per-card focal points: which part of a cropped project-card image stays visible.
+// Keys are card links (e.g. "/copy-of-sageware"); values are CSS object-position
+// values as "x% y%" (0% = left/top, 50% = center, 100% = right/bottom).
+// Cards not listed stay centered.
+const FOCAL_POINT = /^\d{1,3}% \d{1,3}%$/;
+const focalPoints = JSON.parse(
+  fs.readFileSync("src/card-focal-points.json", "utf8"),
+);
+for (const [href, value] of Object.entries(focalPoints))
+  if (!FOCAL_POINT.test(value))
+    throw new Error(
+      `src/card-focal-points.json: "${href}" must look like "50% 0%", got "${value}"`,
+    );
 
 // All templates use the same content, typography and interactive components.
 export const esc = (s) =>
@@ -196,7 +211,7 @@ export function renderPage(
       continue;
     }
     if (n.type === "cards") {
-      body += `<div class="project-grid">${n.items.map((c) => `<a class="project" href="${esc(c.href)}" aria-labelledby="${esc(c.caption.id)}"><div class="project-image">${image(c.image, true, "")}</div>${Rich(c.caption)}</a>`).join("")}</div>`;
+      body += `<div class="project-grid">${n.items.map((c) => `<a class="project" href="${esc(c.href)}" aria-labelledby="${esc(c.caption.id)}"><div class="project-image"${focalPoints[c.href] ? ` style="--focal-point:${focalPoints[c.href]}"` : ""}>${image(c.image, true, "")}</div>${Rich(c.caption)}</a>`).join("")}</div>`;
       continue;
     }
     if (n.type === "image" && p.slug === "photography") {
