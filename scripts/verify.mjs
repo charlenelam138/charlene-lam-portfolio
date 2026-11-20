@@ -1,6 +1,11 @@
 import fs from "node:fs";
 import crypto from "node:crypto";
-import { omittedVideoIds, omittedImageIds } from "./components.mjs";
+import {
+  omittedVideoIds,
+  omittedImageIds,
+  cardsFor,
+  hiddenCardHrefs,
+} from "./components.mjs";
 const pages = JSON.parse(fs.readFileSync("src/content.json", "utf8"));
 const assets = JSON.parse(fs.readFileSync("audit/assets.json", "utf8"));
 const originals = JSON.parse(
@@ -49,10 +54,15 @@ for (const p of pages) {
     if (seen.has(id)) errors.push(`${p.path}: duplicate id ${id}`);
     seen.add(id);
   }
+  // Nodes as shown on the page: card listings may hide or add cards
+  // (src/card-listings.json). Original-text checks below still use p.nodes.
+  const shown = p.nodes.map((n) =>
+    n.type === "cards" ? { ...n, items: cardsFor(p.slug, n.items) } : n,
+  );
   const titleCount = (html.match(/<h1[ >]/g) || []).length;
   if (titleCount !== (p.slug === "fullscreen-page" ? 0 : 1))
     errors.push(`${p.path}: expected one content h1, found ${titleCount}`);
-  for (const n of blocks(p.nodes)) {
+  for (const n of blocks(shown)) {
     const match = html.match(
       new RegExp('<div[^>]*\\sid="' + n.id + '"[^>]*>([\\s\\S]*?)<\\/div>'),
     );
@@ -88,7 +98,7 @@ for (const p of pages) {
   const rendered = [...html.matchAll(/data-original="([^"]+)"/g)].map(
     (m) => m[1],
   );
-  if (JSON.stringify(rendered) !== JSON.stringify(images(p.nodes.filter(n => !omittedImageIds.has(n.id)))))
+  if (JSON.stringify(rendered) !== JSON.stringify(images(shown.filter(n => !omittedImageIds.has(n.id)))))
     errors.push(`${p.path}: original image sequence changed`);
   imageCount += rendered.length;
   const videos = [...html.matchAll(/<video[^>]*\ssrc="([^"]+)"/g)].map(m => m[1]);
@@ -128,6 +138,7 @@ for (const p of pages) {
     const href = link.href.replace("https://www.charlene-lam.com", "") || "/";
     if (href === p.path && p.nav.some((item) => item.text === link.text))
       continue;
+    if (hiddenCardHrefs(p.slug).includes(href)) continue; // card hidden on purpose
     if (!html.includes(href))
       errors.push(`${p.path}: missing original link ${href}`);
   }

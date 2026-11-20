@@ -16,6 +16,47 @@ for (const [href, value] of Object.entries(focalPoints))
       `src/card-focal-points.json: "${href}" must look like "50% 0%", got "${value}"`,
     );
 
+// Per-page card listing overrides (src/card-listings.json). For a page slug,
+// "remove" hides cards by link and "add" appends the featured-works card from
+// the Home page (same image and label). Content data and pages are untouched;
+// verify.mjs applies the same override via cardsFor().
+const cardListings = JSON.parse(
+  fs.readFileSync("src/card-listings.json", "utf8"),
+);
+const homeCards = JSON.parse(fs.readFileSync("src/content.json", "utf8"))
+  .find((x) => x.slug === "home")
+  .nodes.find((n) => n.type === "cards").items;
+export const hiddenCardHrefs = (slug) => cardListings[slug]?.remove ?? [];
+export function cardsFor(slug, items) {
+  const rule = cardListings[slug];
+  if (!rule) return items;
+  const remove = new Set(rule.remove ?? []);
+  for (const href of remove)
+    if (!items.some((c) => c.href === href))
+      throw new Error(`card-listings: "${href}" is not on the ${slug} page`);
+  const shown = items.filter((c) => !remove.has(c.href));
+  for (const href of rule.add ?? []) {
+    if (shown.some((c) => c.href === href))
+      throw new Error(`card-listings: "${href}" is already on the ${slug} page`);
+    const card = homeCards.find((c) => c.href === href);
+    if (!card)
+      throw new Error(`card-listings: no Home card links to "${href}"`);
+    shown.push(card);
+  }
+  if (!rule.order) return shown;
+  // "order" lists every card link on the page, in display order (row by row).
+  const listed = new Set(rule.order);
+  if (
+    listed.size !== rule.order.length ||
+    listed.size !== shown.length ||
+    !shown.every((c) => listed.has(c.href))
+  )
+    throw new Error(
+      `card-listings: "order" for ${slug} must list exactly: ${shown.map((c) => c.href).join(", ")}`,
+    );
+  return rule.order.map((href) => shown.find((c) => c.href === href));
+}
+
 // All templates use the same content, typography and interactive components.
 export const esc = (s) =>
   String(s ?? "")
@@ -217,7 +258,7 @@ export function renderPage(
     }
     if (n.type === "image" && omittedImageIds.has(n.id)) continue;
     if (n.type === "cards") {
-      body += `<div class="project-grid">${n.items.map((c) => `<a class="project" href="${esc(c.href)}" aria-labelledby="${esc(c.caption.id)}"><div class="project-image"${focalPoints[c.href] ? ` style="--focal-point:${focalPoints[c.href]}"` : ""}>${image(c.image, true, "")}</div>${Rich(c.caption)}</a>`).join("")}</div>`;
+      body += `<div class="project-grid">${cardsFor(p.slug, n.items).map((c) => `<a class="project" href="${esc(c.href)}" aria-labelledby="${esc(c.caption.id)}"><div class="project-image"${focalPoints[c.href] ? ` style="--focal-point:${focalPoints[c.href]}"` : ""}>${image(c.image, true, "")}</div>${Rich(c.caption)}</a>`).join("")}</div>`;
       continue;
     }
     if (n.type === "image" && p.slug === "photography") {

@@ -1,0 +1,13 @@
+{
+  "engineering": {
+    "remove": ["/updating"],
+    "add": ["/sageware", "/endless-garden"],
+    "order": [
+      "/endless-garden",
+      "/sageware",
+      "/apple",
+      "/automated-gripper",
+      "/autopasser"
+    ]
+  }
+}
